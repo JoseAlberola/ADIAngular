@@ -6,35 +6,62 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title:string = 'Lista de la compra';
+  title:string = 'LISTA DE TAREAS';
+  msg:string = '';
+  err: string = '';
+  ocultarFormUpdate:boolean = true;
 
-  employees = [
-    {'name': 'Jose', position: 'manager', email:"jose@ua"},
-    {'name': 'Javito', position: 'manager', email:"havi@ua"},
-    {'name': 'Pedris', position: 'manager', email:"pedro@ua"},
+  tareas = [
+    {'tarea': 'Hacer la compra'},
+    {'tarea': 'Pasear al perro'},
+    {'tarea': 'Trabajo ADI'}
   ]
 
   model:any = {};
   model2:any = {};
 
-  addEmployee():void{
-    this.employees.push(this.model);
+  addTarea():void{
+    this.tareas.push(this.model);
+    this.msg = "Tarea creada";
   }
 
-  deleteEmployee(i:number):void{
+  deleteTarea(i:number):void{
+    var borrar = confirm('¿Deseas eliminar la tarea?');
 
+    if(borrar){
+      this.tareas.splice(i, 1);
+      this.msg = "Tarea borrada";
+    }
   }
 
-  myValue: number = 0;
+  myValue: number = -1;
 
-  editEmployee(i: number):void{
-    this.model2.name = this.employees[i].name;
-    this.model2.position = this.employees[i].position;
-    this.model2.email = this.employees[i].email;
+  editTarea(i: number):void{
+    this.ocultarFormUpdate = false;
+    this.model2.tarea = this.tareas[i].tarea;
     this.myValue = i;
   }
 
-  updateEmployee():void{
-    console.log(this.model2);
+  updateTarea():void{
+    let i = this.myValue;
+
+    if(i < 0){
+      this.err = "Debes seleccionar una tarea a editar";
+    }
+    else{
+      for(let j = 0; j < this.tareas.length; j++){
+        if(i == j){
+          this.tareas[i] = this.model2;
+          this.model2 = {};
+          this.msg = "Tarea actualizada";
+        }
+      }
+    }
+    this.myValue = -1;
+  }
+
+  closeAlert():void{
+    this.msg = '';
+    this.err = '';
   }
 }
